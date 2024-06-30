@@ -5,6 +5,7 @@ import { useState } from "react";
 import { InputTodo } from "./components/InputTodo";
 import { IncompleteTodos } from "./components/IncompleteTodos";
 import { CompleteTodos } from "./components/CompleteTodos";
+import { CountBox } from "./components/CountBox";
 
 function App() {
   const [todoText, setTodoText] = useState("");
@@ -99,6 +100,10 @@ function App() {
           todoText={todoText}
           onClick={onClickAddTodo}
           onChange={onChangeText}
+        />
+        <CountBox
+          incompleteTodos={incompleteTodos}
+          completeTodos={completeTodos}
         />
         <IncompleteTodos
           incompleteTodos={incompleteTodos}
