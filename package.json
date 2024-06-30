@@ -1,6 +1,7 @@
 {
   "name": "react_todo_list",
   "version": "0.1.0",
+  "homepage": "https://torihazi.github.io/react_todo_list",
   "private": true,
   "dependencies": {
     "@chakra-ui/cli": "^2.4.1",
@@ -21,7 +22,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "rm": "rm -rf docs",
+    "mv": "mv build docs",
+    "deploy": "npm run rm && npm run build && npm run mv"
   },
   "eslintConfig": {
     "extends": [
