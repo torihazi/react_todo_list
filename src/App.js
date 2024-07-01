@@ -1,6 +1,5 @@
 import { ChakraProvider, VStack } from "@chakra-ui/react";
 
-import "./App.css";
 import { useState } from "react";
 import { InputTodo } from "./components/InputTodo";
 import { CountBox } from "./components/CountBox";

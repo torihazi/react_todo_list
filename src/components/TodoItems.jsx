@@ -1,11 +1,5 @@
 import { DeleteIcon, EditIcon, RepeatIcon } from "@chakra-ui/icons";
 import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   Box,
   Button,
   ButtonGroup,
@@ -16,6 +10,8 @@ import {
   ListItem,
   useDisclosure,
 } from "@chakra-ui/react";
+
+import { ConfirmDeleteDialog } from "./ConfirmDeleteDialog";
 
 export const TodoItems = (props) => {
   const {
@@ -138,31 +134,11 @@ export const TodoItems = (props) => {
             </ListItem>
           ))}
 
-          <AlertDialog isOpen={isOpen} onClose={onClose}>
-            <AlertDialogOverlay>
-              <AlertDialogContent>
-                <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                  確認画面
-                </AlertDialogHeader>
-
-                <AlertDialogBody>本当に削除して良いですか？</AlertDialogBody>
-
-                <AlertDialogFooter>
-                  <Button onClick={onClose}>しない</Button>
-                  <Button
-                    ml={3}
-                    colorScheme="red"
-                    onClick={() => {
-                      onClickDeleteTodo();
-                      onClose();
-                    }}
-                  >
-                    する
-                  </Button>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialogOverlay>
-          </AlertDialog>
+          <ConfirmDeleteDialog
+            isOpen={isOpen}
+            onClose={onClose}
+            onClickDeleteTodo={onClickDeleteTodo}
+          />
         </List>
       </Box>
     </>
