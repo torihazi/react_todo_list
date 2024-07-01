@@ -3,9 +3,8 @@ import { ChakraProvider, VStack } from "@chakra-ui/react";
 import "./App.css";
 import { useState } from "react";
 import { InputTodo } from "./components/InputTodo";
-import { IncompleteTodos } from "./components/IncompleteTodos";
-import { CompleteTodos } from "./components/CompleteTodos";
 import { CountBox } from "./components/CountBox";
+import { TodoItems } from "./components/TodoItems";
 
 function App() {
   const [todoText, setTodoText] = useState("");
@@ -105,16 +104,16 @@ function App() {
           incompleteTodos={incompleteTodos}
           completeTodos={completeTodos}
         />
-        <IncompleteTodos
+        <TodoItems
           incompleteTodos={incompleteTodos}
+          incompleteListName="未完了"
           onChangeUpdateText={onChangeUpdateText}
           onClickUpdate={onClickUpdate}
           onChangeComplete={onChangeComplete}
           onClickToggleUpdate={onClickToggleUpdate}
           onClickDeleteIncompleteTodo={onClickDeleteIncompleteTodo}
-        />
-        <CompleteTodos
           completeTodos={completeTodos}
+          completeListName="完了"
           onChangeBack={onChangeBack}
           onClickDeleteCompleteTodo={onClickDeleteCompleteTodo}
         />
