@@ -8,11 +8,39 @@ import { TodoItems } from "./components/TodoItems";
 
 function App() {
   const [todoText, setTodoText] = useState("");
-  const [incompleteTodos, setIncompleteTodos] = useState([]);
-  const [completeTodos, setCompleteTodos] = useState([]);
+  const [todos, setTodos] = useState([]);
+  const incompleteTodos = todos.filter((item) => !item.isChecked);
+  const completeTodos = todos.filter((item) => item.isChecked);
 
   const onChangeText = (e) => {
     setTodoText(e.target.value);
+  };
+
+  const onClickAddTodo = () => {
+    if (todoText === "") return;
+    setTodos([
+      ...todos,
+      { text: todoText, isEditable: false, isChecked: false },
+    ]);
+    setTodoText("");
+  };
+
+  const onChangeComplete = (index) => {
+    const newCompleteTodos = [
+      ...completeTodos,
+      { ...incompleteTodos[index], isChecked: true },
+    ];
+    incompleteTodos.splice(index, 1);
+    setTodos([...newCompleteTodos, ...incompleteTodos]);
+  };
+
+  const onChangeBack = (index) => {
+    const newIncompleteTodos = [
+      ...incompleteTodos,
+      { ...completeTodos[index], isChecked: false },
+    ];
+    completeTodos.splice(index, 1);
+    setTodos([...completeTodos, ...newIncompleteTodos]);
   };
 
   const onChangeUpdateText = (e, index) => {
@@ -23,73 +51,28 @@ function App() {
         return todo;
       }
     });
-    setIncompleteTodos(newTodos);
-  };
-
-  const onClickAddTodo = () => {
-    if (todoText === "") return;
-    const newIncompleteTodos = [
-      ...incompleteTodos,
-      { text: todoText, isEditable: false, isChecked: false },
-    ];
-    setIncompleteTodos(newIncompleteTodos);
-    setTodoText("");
-  };
-
-  const onChangeComplete = (index) => {
-    const newIncompleteTodos = [...incompleteTodos];
-    newIncompleteTodos.splice(index, 1);
-    const newCompleteTodos = [
-      ...completeTodos,
-      { ...incompleteTodos[index], isChecked: true },
-    ];
-    setCompleteTodos(newCompleteTodos);
-    setIncompleteTodos(newIncompleteTodos);
-  };
-
-  const onChangeBack = (index) => {
-    const newCompleteTodos = [...completeTodos];
-    newCompleteTodos.splice(index, 1);
-    const newIncompleteTodos = [
-      ...incompleteTodos,
-      { ...completeTodos[index], isChecked: false },
-    ];
-    setCompleteTodos(newCompleteTodos);
-    setIncompleteTodos(newIncompleteTodos);
+    setTodos([...completeTodos, ...newTodos]);
   };
 
   const onClickDeleteIncompleteTodo = (index) => {
-    const newIncompleteTodos = [...incompleteTodos];
-    newIncompleteTodos.splice(index, 1);
-    setIncompleteTodos(newIncompleteTodos);
+    incompleteTodos.splice(index, 1);
+    setTodos([...completeTodos, ...incompleteTodos]);
   };
 
   const onClickDeleteCompleteTodo = (index) => {
-    const newCompleteTodos = [...completeTodos];
-    newCompleteTodos.splice(index, 1);
-    setCompleteTodos(newCompleteTodos);
+    completeTodos.splice(index, 1);
+    setTodos([...completeTodos, ...incompleteTodos]);
   };
 
   const onClickToggleUpdate = (index) => {
     const newTodos = incompleteTodos.map((obj, i) => {
       if (i === index) {
-        return { ...obj, isEditable: true };
+        return { ...obj, isEditable: !obj.isEditable };
       } else {
         return obj;
       }
     });
-    setIncompleteTodos(newTodos);
-  };
-
-  const onClickUpdate = (index) => {
-    const newTodos = incompleteTodos.map((todo, i) => {
-      if (i === index) {
-        return { ...todo, isEditable: false };
-      } else {
-        return todo;
-      }
-    });
-    setIncompleteTodos(newTodos);
+    setTodos([...completeTodos, ...newTodos]);
   };
 
   return (
@@ -108,7 +91,6 @@ function App() {
           incompleteTodos={incompleteTodos}
           incompleteListName="未完了"
           onChangeUpdateText={onChangeUpdateText}
-          onClickUpdate={onClickUpdate}
           onChangeComplete={onChangeComplete}
           onClickToggleUpdate={onClickToggleUpdate}
           onClickDeleteIncompleteTodo={onClickDeleteIncompleteTodo}

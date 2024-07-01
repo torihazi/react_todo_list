@@ -24,7 +24,6 @@ export const TodoItems = (props) => {
     incompleteListName,
     completeListName,
     onChangeUpdateText,
-    onClickUpdate,
     onChangeComplete,
     onClickToggleUpdate,
     onClickDeleteIncompleteTodo,
@@ -60,7 +59,7 @@ export const TodoItems = (props) => {
                   />
                   <Button
                     colorScheme="teal"
-                    onClick={() => onClickUpdate(index)}
+                    onClick={() => onClickToggleUpdate(index)}
                   >
                     <RepeatIcon />
                   </Button>
