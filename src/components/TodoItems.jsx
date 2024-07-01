@@ -68,7 +68,6 @@ export const TodoItems = (props) => {
                   <Checkbox
                     isChecked={todo.isChecked}
                     onChange={() => onToggleComplete(todo.id)}
-                    value="incomplete"
                   >
                     {todo.text}
                   </Checkbox>
@@ -116,7 +115,6 @@ export const TodoItems = (props) => {
               <Checkbox
                 isChecked={todo.isChecked}
                 onChange={() => onToggleComplete(todo.id)}
-                value="complete"
               >
                 {todo.text}
               </Checkbox>
