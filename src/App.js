@@ -9,70 +9,61 @@ import { TodoItems } from "./components/TodoItems";
 function App() {
   const [todoText, setTodoText] = useState("");
   const [todos, setTodos] = useState([]);
+  const [id, setId] = useState(1);
+  const [deletingId, setDeletingId] = useState();
   const incompleteTodos = todos.filter((item) => !item.isChecked);
   const completeTodos = todos.filter((item) => item.isChecked);
 
-  const onChangeText = (e) => {
-    setTodoText(e.target.value);
-  };
+  const onChangeText = (e) => setTodoText(e.target.value);
 
   const onClickAddTodo = () => {
     if (todoText === "") return;
     setTodos([
       ...todos,
-      { text: todoText, isEditable: false, isChecked: false },
+      { id: id, text: todoText, isEditable: false, isChecked: false },
     ]);
     setTodoText("");
+    setId(id + 1);
   };
 
-  const onChangeComplete = (index) => {
-    const newCompleteTodos = [
-      ...completeTodos,
-      { ...incompleteTodos[index], isChecked: true },
-    ];
-    incompleteTodos.splice(index, 1);
-    setTodos([...newCompleteTodos, ...incompleteTodos]);
+  const onToggleComplete = (id) => {
+    const newTodos = todos.map((todo) => {
+      if (id === todo.id) {
+        return { ...todo, isChecked: !todo.isChecked };
+      } else {
+        return todo;
+      }
+    });
+    setTodos([...newTodos]);
   };
 
-  const onChangeBack = (index) => {
-    const newIncompleteTodos = [
-      ...incompleteTodos,
-      { ...completeTodos[index], isChecked: false },
-    ];
-    completeTodos.splice(index, 1);
-    setTodos([...completeTodos, ...newIncompleteTodos]);
-  };
-
-  const onChangeUpdateText = (e, index) => {
-    const newTodos = incompleteTodos.map((todo, i) => {
-      if (i === index) {
+  const onChangeUpdateText = (e, id) => {
+    const newTodos = todos.map((todo) => {
+      if (id === todo.id) {
         return { ...todo, text: e.target.value };
       } else {
         return todo;
       }
     });
-    setTodos([...completeTodos, ...newTodos]);
+    setTodos([...newTodos]);
   };
 
-  const onClickDeleteIncompleteTodo = (index) => {
-    incompleteTodos.splice(index, 1);
-    setTodos([...completeTodos, ...incompleteTodos]);
+  const onClickMemorizeDeletingId = (id) => setDeletingId(id);
+
+  const onClickDeleteTodo = () => {
+    const newTodos = todos.filter((todo) => deletingId !== todo.id);
+    setTodos(newTodos);
   };
 
-  const onClickDeleteCompleteTodo = (index) => {
-    completeTodos.splice(index, 1);
-    setTodos([...completeTodos, ...incompleteTodos]);
-  };
-
-  const onClickToggleUpdate = (index) => {
-    const newTodos = incompleteTodos.map((obj, i) => {
-      if (i === index) {
-        return { ...obj, isEditable: !obj.isEditable };
+  const onClickToggleUpdate = (id) => {
+    const newTodos = todos.map((todo) => {
+      if (id === todo.id) {
+        return { ...todo, isEditable: !todo.isEditable };
       } else {
-        return obj;
+        return todo;
       }
     });
-    setTodos([...completeTodos, ...newTodos]);
+    setTodos([...newTodos]);
   };
 
   return (
@@ -91,13 +82,13 @@ function App() {
           incompleteTodos={incompleteTodos}
           incompleteListName="未完了"
           onChangeUpdateText={onChangeUpdateText}
-          onChangeComplete={onChangeComplete}
+          onToggleComplete={onToggleComplete}
           onClickToggleUpdate={onClickToggleUpdate}
-          onClickDeleteIncompleteTodo={onClickDeleteIncompleteTodo}
+          onClickDeleteTodo={onClickDeleteTodo}
+          onClickMemorizeDeletingId={onClickMemorizeDeletingId}
           completeTodos={completeTodos}
           completeListName="完了"
-          onChangeBack={onChangeBack}
-          onClickDeleteCompleteTodo={onClickDeleteCompleteTodo}
+          // onClickDeleteCompleteTodo={onClickDeleteCompleteTodo}
         />
       </VStack>
     </ChakraProvider>

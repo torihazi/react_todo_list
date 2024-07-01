@@ -24,11 +24,10 @@ export const TodoItems = (props) => {
     incompleteListName,
     completeListName,
     onChangeUpdateText,
-    onChangeComplete,
+    onToggleComplete,
     onClickToggleUpdate,
-    onClickDeleteIncompleteTodo,
-    onClickDeleteCompleteTodo,
-    onChangeBack,
+    onClickDeleteTodo,
+    onClickMemorizeDeletingId,
   } = props;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -47,19 +46,23 @@ export const TodoItems = (props) => {
           {incompleteListName}
         </Heading>
         <List spacing={2}>
-          {incompleteTodos.map((todo, index) => (
-            <ListItem display="flex" justifyContent="space-between" key={index}>
+          {incompleteTodos.map((todo) => (
+            <ListItem
+              display="flex"
+              justifyContent="space-between"
+              key={todo.id}
+            >
               {todo.isEditable ? (
                 <>
                   <Input
                     htmlSize={30}
                     variant="outline"
                     value={todo.text}
-                    onChange={(e) => onChangeUpdateText(e, index)}
+                    onChange={(e) => onChangeUpdateText(e, todo.id)}
                   />
                   <Button
                     colorScheme="teal"
-                    onClick={() => onClickToggleUpdate(index)}
+                    onClick={() => onClickToggleUpdate(todo.id)}
                   >
                     <RepeatIcon />
                   </Button>
@@ -68,47 +71,27 @@ export const TodoItems = (props) => {
                 <>
                   <Checkbox
                     isChecked={todo.isChecked}
-                    onChange={() => onChangeComplete(index)}
+                    onChange={() => onToggleComplete(todo.id)}
+                    value="incomplete"
                   >
                     {todo.text}
                   </Checkbox>
                   <ButtonGroup>
                     <Button
                       colorScheme="teal"
-                      onClick={() => onClickToggleUpdate(index)}
+                      onClick={() => onClickToggleUpdate(todo.id)}
                     >
                       <EditIcon />
                     </Button>
-                    <Button colorScheme="red" onClick={onOpen}>
+                    <Button
+                      colorScheme="red"
+                      onClick={() => {
+                        onClickMemorizeDeletingId(todo.id);
+                        onOpen();
+                      }}
+                    >
                       <DeleteIcon />
                     </Button>
-                    <AlertDialog isOpen={isOpen} onClose={onClose}>
-                      <AlertDialogOverlay>
-                        <AlertDialogContent>
-                          <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                            確認画面
-                          </AlertDialogHeader>
-
-                          <AlertDialogBody>
-                            本当に削除して良いですか？
-                          </AlertDialogBody>
-
-                          <AlertDialogFooter>
-                            <Button onClick={onClose}>しない</Button>
-                            <Button
-                              ml={3}
-                              colorScheme="red"
-                              onClick={() => {
-                                onClickDeleteIncompleteTodo(index);
-                                onClose();
-                              }}
-                            >
-                              する
-                            </Button>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialogOverlay>
-                    </AlertDialog>
                   </ButtonGroup>
                 </>
               )}
@@ -128,48 +111,58 @@ export const TodoItems = (props) => {
           {completeListName}
         </Heading>
         <List spacing={2}>
-          {completeTodos.map((todo, index) => (
-            <ListItem display="flex" justifyContent="space-between" key={index}>
+          {completeTodos.map((todo) => (
+            <ListItem
+              display="flex"
+              justifyContent="space-between"
+              key={todo.id}
+            >
               <Checkbox
                 isChecked={todo.isChecked}
-                onChange={() => onChangeBack(index)}
+                onChange={() => onToggleComplete(todo.id)}
+                value="complete"
               >
                 {todo.text}
               </Checkbox>
               <ButtonGroup>
-                <Button colorScheme="red" onClick={onOpen}>
+                <Button
+                  colorScheme="red"
+                  onClick={() => {
+                    onClickMemorizeDeletingId(todo.id);
+                    onOpen();
+                  }}
+                >
                   <DeleteIcon />
                 </Button>
-                <AlertDialog isOpen={isOpen} onClose={onClose}>
-                  <AlertDialogOverlay>
-                    <AlertDialogContent>
-                      <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                        確認画面
-                      </AlertDialogHeader>
-
-                      <AlertDialogBody>
-                        本当に削除して良いですか？
-                      </AlertDialogBody>
-
-                      <AlertDialogFooter>
-                        <Button onClick={onClose}>しない</Button>
-                        <Button
-                          ml={3}
-                          colorScheme="red"
-                          onClick={() => {
-                            onClickDeleteCompleteTodo(index);
-                            onClose();
-                          }}
-                        >
-                          する
-                        </Button>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialogOverlay>
-                </AlertDialog>
               </ButtonGroup>
             </ListItem>
           ))}
+
+          <AlertDialog isOpen={isOpen} onClose={onClose}>
+            <AlertDialogOverlay>
+              <AlertDialogContent>
+                <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                  確認画面
+                </AlertDialogHeader>
+
+                <AlertDialogBody>本当に削除して良いですか？</AlertDialogBody>
+
+                <AlertDialogFooter>
+                  <Button onClick={onClose}>しない</Button>
+                  <Button
+                    ml={3}
+                    colorScheme="red"
+                    onClick={() => {
+                      onClickDeleteTodo();
+                      onClose();
+                    }}
+                  >
+                    する
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialogOverlay>
+          </AlertDialog>
         </List>
       </Box>
     </>
