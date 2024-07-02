@@ -43,7 +43,6 @@ function App() {
           onClickMemorizeDeletingId={onClickMemorizeDeletingId}
           completeTodos={completeTodos}
           completeListName="完了"
-          // onClickDeleteCompleteTodo={onClickDeleteCompleteTodo}
         />
       </VStack>
     </ChakraProvider>
