@@ -1,24 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+import { ChakraProvider, VStack } from "@chakra-ui/react";
+
+import { InputTodo } from "./components/InputTodo";
+import { CountBox } from "./components/CountBox";
+import { TodoItems } from "./components/TodoItems";
+import { useTodoManager } from "./hooks/useTodoManager";
 
 function App() {
+  const {
+    todos,
+    todoText,
+    onChangeText,
+    onClickAddTodo,
+    onToggleComplete,
+    onChangeUpdateText,
+    onClickMemorizeDeletingId,
+    onClickDeleteTodo,
+    onClickToggleUpdate,
+  } = useTodoManager();
+
+  const incompleteTodos = todos.filter((item) => !item.isChecked);
+  const completeTodos = todos.filter((item) => item.isChecked);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ChakraProvider>
+      <VStack spacing={10}>
+        <InputTodo
+          todoText={todoText}
+          onClick={onClickAddTodo}
+          onChange={onChangeText}
+        />
+        <CountBox
+          incompleteTodos={incompleteTodos}
+          completeTodos={completeTodos}
+        />
+        <TodoItems
+          isComplete={false}
+          todos={incompleteTodos}
+          onChangeUpdateText={onChangeUpdateText}
+          onToggleComplete={onToggleComplete}
+          onClickToggleUpdate={onClickToggleUpdate}
+          onClickDeleteTodo={onClickDeleteTodo}
+          onClickMemorizeDeletingId={onClickMemorizeDeletingId}
+        />
+        <TodoItems
+          isComplete={true}
+          todos={completeTodos}
+          onChangeUpdateText={onChangeUpdateText}
+          onToggleComplete={onToggleComplete}
+          onClickToggleUpdate={onClickToggleUpdate}
+          onClickDeleteTodo={onClickDeleteTodo}
+          onClickMemorizeDeletingId={onClickMemorizeDeletingId}
+        />
+      </VStack>
+    </ChakraProvider>
   );
 }
 
