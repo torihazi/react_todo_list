@@ -15,10 +15,8 @@ import { ConfirmDeleteDialog } from "./ConfirmDeleteDialog";
 
 export const TodoItems = (props) => {
   const {
-    incompleteTodos,
-    completeTodos,
-    incompleteListName,
-    completeListName,
+    todos,
+    isComplete,
     onChangeUpdateText,
     onToggleComplete,
     onClickToggleUpdate,
@@ -39,10 +37,10 @@ export const TodoItems = (props) => {
         p={5}
       >
         <Heading textAlign="center" as="h2" size="lg">
-          {incompleteListName}
+          {isComplete ? "完了" : "未完了"}
         </Heading>
         <List spacing={2}>
-          {incompleteTodos.map((todo) => (
+          {todos.map((todo) => (
             <ListItem
               display="flex"
               justifyContent="space-between"
@@ -72,12 +70,15 @@ export const TodoItems = (props) => {
                     {todo.text}
                   </Checkbox>
                   <ButtonGroup>
-                    <Button
-                      colorScheme="teal"
-                      onClick={() => onClickToggleUpdate(todo.id)}
-                    >
-                      <EditIcon />
-                    </Button>
+                    {!isComplete && (
+                      <Button
+                        colorScheme="teal"
+                        onClick={() => onClickToggleUpdate(todo.id)}
+                      >
+                        <EditIcon />
+                      </Button>
+                    )}
+
                     <Button
                       colorScheme="red"
                       onClick={() => {
@@ -94,51 +95,11 @@ export const TodoItems = (props) => {
           ))}
         </List>
       </Box>
-      <Box
-        minH="200px"
-        minW="500px"
-        border="1px"
-        borderRadius="10"
-        borderColor="gray.100"
-        p={5}
-      >
-        <Heading textAlign="center" as="h2" size="lg">
-          {completeListName}
-        </Heading>
-        <List spacing={2}>
-          {completeTodos.map((todo) => (
-            <ListItem
-              display="flex"
-              justifyContent="space-between"
-              key={todo.id}
-            >
-              <Checkbox
-                isChecked={todo.isChecked}
-                onChange={() => onToggleComplete(todo.id)}
-              >
-                {todo.text}
-              </Checkbox>
-              <ButtonGroup>
-                <Button
-                  colorScheme="red"
-                  onClick={() => {
-                    onClickMemorizeDeletingId(todo.id);
-                    onOpen();
-                  }}
-                >
-                  <DeleteIcon />
-                </Button>
-              </ButtonGroup>
-            </ListItem>
-          ))}
-
-          <ConfirmDeleteDialog
-            isOpen={isOpen}
-            onClose={onClose}
-            onClickDeleteTodo={onClickDeleteTodo}
-          />
-        </List>
-      </Box>
+      <ConfirmDeleteDialog
+        isOpen={isOpen}
+        onClose={onClose}
+        onClickDeleteTodo={onClickDeleteTodo}
+      />
     </>
   );
 };

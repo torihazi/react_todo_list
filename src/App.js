@@ -34,15 +34,22 @@ function App() {
           completeTodos={completeTodos}
         />
         <TodoItems
-          incompleteTodos={incompleteTodos}
-          incompleteListName="未完了"
+          isComplete={false}
+          todos={incompleteTodos}
           onChangeUpdateText={onChangeUpdateText}
           onToggleComplete={onToggleComplete}
           onClickToggleUpdate={onClickToggleUpdate}
           onClickDeleteTodo={onClickDeleteTodo}
           onClickMemorizeDeletingId={onClickMemorizeDeletingId}
-          completeTodos={completeTodos}
-          completeListName="完了"
+        />
+        <TodoItems
+          isComplete={true}
+          todos={completeTodos}
+          onChangeUpdateText={onChangeUpdateText}
+          onToggleComplete={onToggleComplete}
+          onClickToggleUpdate={onClickToggleUpdate}
+          onClickDeleteTodo={onClickDeleteTodo}
+          onClickMemorizeDeletingId={onClickMemorizeDeletingId}
         />
       </VStack>
     </ChakraProvider>
